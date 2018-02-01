@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class GUI {
-	private static JFrame frmfakeappimageoptimizerV;
+	private static JFrame frame;
 
 	/**
 	 * @wbp.parser.entryPoint
@@ -22,43 +22,50 @@ public class GUI {
 			public void run() {
 				try {
 					initialize();
-
-					frmfakeappimageoptimizerV.setVisible(true);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			}
 		});
+
+		new Runnable() {
+			@Override
+			public void run() {
+				if (Main.remoteVersionCode != -1 && Main.remoteVersionCode > Main.versionCode) {
+					UpdaterGUI.init();
+				}
+			}
+		}.run();
 	}
 
 	private static void initialize() {
-		frmfakeappimageoptimizerV = new JFrame();
-		frmfakeappimageoptimizerV.setTitle("FakeApp-ImageOptimizer v" + Main.versionName);
-		frmfakeappimageoptimizerV.setBounds(100, 100, 450, 246);
-		frmfakeappimageoptimizerV.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmfakeappimageoptimizerV.getContentPane().setLayout(null);
+		frame = new JFrame();
+		frame.setTitle("FakeApp-ImageOptimizer v" + Main.versionName);
+		frame.setBounds(100, 100, 450, 246);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 
 		JLabel lblSrcDir = new JLabel("Source-Directory");
 		lblSrcDir.setBounds(10, 11, 414, 15);
-		frmfakeappimageoptimizerV.getContentPane().add(lblSrcDir);
+		frame.getContentPane().add(lblSrcDir);
 
 		JTextField srcTextField = new JTextField();
 		lblSrcDir.setLabelFor(srcTextField);
 		srcTextField.setFont(new Font("Consolas", Font.PLAIN, 11));
 		srcTextField.setToolTipText("A path to directory with images that should be used by FakeApp for extracting");
 		srcTextField.setBounds(10, 37, 291, 25);
-		frmfakeappimageoptimizerV.getContentPane().add(srcTextField);
+		frame.getContentPane().add(srcTextField);
 		srcTextField.setColumns(10);
 
 		JButton srcBrowseButton = new JButton("Browse");
 		srcBrowseButton.setToolTipText("Not yet available");
 		srcBrowseButton.setEnabled(false);
 		srcBrowseButton.setBounds(335, 37, 89, 25);
-		frmfakeappimageoptimizerV.getContentPane().add(srcBrowseButton);
+		frame.getContentPane().add(srcBrowseButton);
 
 		JLabel lblDestDir = new JLabel("Destination-Directory");
 		lblDestDir.setBounds(10, 73, 414, 15);
-		frmfakeappimageoptimizerV.getContentPane().add(lblDestDir);
+		frame.getContentPane().add(lblDestDir);
 
 		JTextField destTextField = new JTextField();
 		destTextField.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -66,18 +73,18 @@ public class GUI {
 		destTextField.setToolTipText(
 				"<html>A path to the directory where all optimized images should be saved. <b>Overrides existing files!</b></html>");
 		destTextField.setBounds(10, 99, 291, 25);
-		frmfakeappimageoptimizerV.getContentPane().add(destTextField);
+		frame.getContentPane().add(destTextField);
 		destTextField.setColumns(10);
 
 		JButton destBrowseButton = new JButton("Browse");
 		destBrowseButton.setToolTipText("Not yet available");
 		destBrowseButton.setEnabled(false);
 		destBrowseButton.setBounds(335, 99, 89, 23);
-		frmfakeappimageoptimizerV.getContentPane().add(destBrowseButton);
+		frame.getContentPane().add(destBrowseButton);
 
 		JLabel lblStatus = new JLabel("<html><b>Status</b>: Not started yet</html>");
 		lblStatus.setBounds(10, 135, 414, 15);
-		frmfakeappimageoptimizerV.getContentPane().add(lblStatus);
+		frame.getContentPane().add(lblStatus);
 
 		JButton btnStart = new JButton("Start");
 		btnStart.addActionListener(new ActionListener() {
@@ -121,6 +128,8 @@ public class GUI {
 			}
 		});
 		btnStart.setBounds(173, 173, 89, 23);
-		frmfakeappimageoptimizerV.getContentPane().add(btnStart);
+		frame.getContentPane().add(btnStart);
+
+		frame.setVisible(true);
 	}
 }

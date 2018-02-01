@@ -1,14 +1,27 @@
 package me.codedmemory981.fakeapp_image_optimizer;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Scanner;
 
 public class Main {
-	public static final String versionName = "1.0";
+	public static final String versionName = "1.1";
 	public static final int versionCode = getLocalVersionCode();
+	public static final int remoteVersionCode = getRemoteVersionCode();
+
+	public static final String downloadURL = "https://github.com/CodedMemory981/FakeApp-ImageOptimizer/releases/latest";
 
 	public static void main(String[] args) {
+		System.out.println("Starting FakeApp-ImageOptimizer by CodedMemory981 v" + versionName);
+
+		if (remoteVersionCode > versionCode) {
+			System.out.println("You are running an outdated Version! Download the latest release at " + downloadURL);
+		} else {
+			System.out.println("You are running the latest release!");
+		}
+
 		boolean nogui = false, showVersion = false, showHelp = false;
 
 		for (String arg : args) {
@@ -95,6 +108,18 @@ public class Main {
 			System.out.println("VersionCode: Unknown");
 		} else {
 			System.out.println("VersionCode: " + versionCode);
+
+			if (remoteVersionCode == -1) {
+				System.out.println("Update: Could not check for Updates!");
+			} else {
+				if (remoteVersionCode <= versionCode) {
+					System.out.println("Update: You are using the latest version!");
+				} else {
+					System.out.println("An update is available! - Current VersionCode: " + versionCode
+							+ " | Latest VersionCode: " + remoteVersionCode);
+					System.out.println("Download at " + downloadURL);
+				}
+			}
 		}
 	}
 
@@ -109,6 +134,27 @@ public class Main {
 		} catch (Exception ex) {
 			System.err.println("Could not get versionCode. Seems like 'versionCode' is missing...");
 
+			ex.printStackTrace();
+		} finally {
+			if (s != null) {
+				s.close();
+			}
+		}
+
+		return result;
+	}
+
+	private static int getRemoteVersionCode() {
+		int result = -1;
+
+		Scanner s = null;
+		try {
+			s = new Scanner(new URL(
+					"https://raw.githubusercontent.com/CodedMemory981/FakeApp-ImageOptimizer/master/versionCode")
+							.openStream());
+
+			result = s.nextInt();
+		} catch (IOException ex) {
 			ex.printStackTrace();
 		} finally {
 			if (s != null) {
